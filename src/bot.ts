@@ -115,7 +115,8 @@ client.on('messageReactionAdd',
             return;
         }
 
-        if (reaction.emoji.name !== reactionId || !msg.guild || msg.author.id === user.id) return;
+        if (reaction.emoji.name !== reactionId || !msg.guild) return;
+        // || msg.author.id === user.id) return;
 
         const starboardChannel = msg.guild.channels.cache.get(channelId);
         if (!starboardChannel || !starboardChannel.isText()) return;
@@ -134,7 +135,7 @@ client.on('messageReactionAdd',
             let starredMsg = await db.get(`SELECT starboard_msg_id FROM starredmessages WHERE guild_id = ${msg.guildId} AND msg_id = ${msg.id}`)
                                     .catch(_ => { return; });
             if (starredMsg) {
-                let starboardEmbedMsg = starboardChannel.messages.cache.get(starredMsg.starboard_msg_id);
+                let starboardEmbedMsg = await starboardChannel.messages.fetch(starredMsg.starboard_msg_id).catch(_ => { return; });
                 if (starboardEmbedMsg) {
                     let embeds = starboardEmbedMsg.embeds;
                     embeds[0].footer = { text: footer };
