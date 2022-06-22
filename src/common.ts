@@ -27,3 +27,7 @@ export function setTimeoutSeconds(callback: Function, seconds: number) : void {
         }
     }, msInSecond);
 }
+
+export function dateToUNIXTimestamp(date: Date) : string {
+    return `<t:${Math.floor(date.getTime() / 1000)}:R>`;
+}

@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/sungbot"
+    "url": "https://github.com/phobosbot"
   },
   "keywords": [
     "twrp",
@@ -21,9 +21,11 @@
   "author": "Corvance",
   "license": "MIT",
   "devDependencies": {
+    "@types/sqlite3": "^3.1.8",
     "discord.js": "^13.8.0",
     "dotenv": "^16.0.1",
     "node": "^16.9.0",
+    "sqlite3": "^5.0.8",
     "typescript": "^4.7.4"
   }
 }
