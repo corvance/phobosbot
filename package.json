@@ -1,0 +1,29 @@
+{
+  "name": "phobosbot",
+  "version": "1.0.0",
+  "description": "A TWRP-themed starboard bot for the Ladyworld Discord server.",
+  "main": "bot.js",
+  "scripts": {
+    "compile": "tsc",
+    "start": "cd dist && node bot.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sungbot"
+  },
+  "keywords": [
+    "twrp",
+    "discord",
+    "discord-js",
+    "phobos"
+  ],
+  "author": "Corvance",
+  "license": "MIT",
+  "devDependencies": {
+    "discord.js": "^13.8.0",
+    "dotenv": "^16.0.1",
+    "node": "^16.9.0",
+    "typescript": "^4.7.4"
+  }
+}
