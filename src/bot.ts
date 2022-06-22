@@ -95,14 +95,14 @@ client.on('messageCreate',
     });
 
 client.on('messageReactionAdd',
-    async function (reaction, user) {
+    async function (reaction, user) : Promise<void> {
         let reactionId: string;
         let channelId: string;
         let threshold: number;
 
         // May be a PartialMessage, so fetch it to get the missing data.
-        const msg: Message | void = await reaction.message.fetch().catch(_ => { return; });
-        if (!msg) return;
+        const msg: Message | void = await reaction.message.fetch().catch(_ => { return Promise.resolve(); });
+        if (!msg) return Promise.resolve();
 
         try {
             let guild = await db.get(`SELECT channel_id, emoji, threshold FROM guilds WHERE guild_id = ${msg.guildId}`);
@@ -112,13 +112,13 @@ client.on('messageReactionAdd',
         }
         catch {
             console.log('Failed to load configuration from database.');
-            return;
+            return Promise.resolve();
         }
 
         if (reaction.emoji.name !== reactionId || !msg.guild || msg.author.id === user.id) return;
 
         const starboardChannel = msg.guild.channels.cache.get(channelId);
-        if (!starboardChannel || !starboardChannel.isText()) return;
+        if (!starboardChannel || !starboardChannel.isText()) return Promise.resolve();
 
         let res = msg.reactions.cache.get(reactionId);
         if (!res) return;
@@ -139,7 +139,7 @@ client.on('messageReactionAdd',
                     let embeds = starboardEmbedMsg.embeds;
                     embeds[0].footer = { text: footer };
                     starboardEmbedMsg.edit({ embeds: embeds });
-                    return;
+                    return Promise.resolve();
                 }
             }
 
@@ -177,6 +177,18 @@ client.on('messageReactionAdd',
                 starboardMessage = await starboardChannel.send({ embeds: embeds }).catch();
             }
 
-            await db.run(`INSERT INTO starredmessages VALUES (${msg.guildId}, ${msg.id}, ${starboardMessage.id})`).catch();
+            // If the message exists in the database already by this point, the original starboard message was deleted,
+            // so just update that with the new one's ID to avoid constantly reposting it.
+            try {
+                let existing = await db.get(`SELECT starboard_msg_id FROM starredmessages WHERE guild_id = ${msg.guildId} AND msg_id = ${msg.id}`);
+
+                if (existing)
+                    await db.run(`UPDATE starredmessages SET starboard_msg_id = ${starboardMessage.id} WHERE guild_id = ${msg.guildId} AND msg_id = ${msg.id}`);
+                else
+                    await db.run(`INSERT INTO starredmessages VALUES (${msg.guildId}, ${msg.id}, ${starboardMessage.id})`);
+            }
+            catch {
+                return Promise.resolve();
+            }
         }
     });
