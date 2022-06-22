@@ -1,6 +1,6 @@
 {
   "name": "phobosbot",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A TWRP-themed starboard bot for the Ladyworld Discord server.",
   "main": "bot.js",
   "scripts": {
