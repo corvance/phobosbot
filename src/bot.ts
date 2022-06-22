@@ -115,8 +115,7 @@ client.on('messageReactionAdd',
             return;
         }
 
-        if (reaction.emoji.name !== reactionId || !msg.guild) return;
-        // || msg.author.id === user.id) return;
+        if (reaction.emoji.name !== reactionId || !msg.guild || msg.author.id === user.id) return;
 
         const starboardChannel = msg.guild.channels.cache.get(channelId);
         if (!starboardChannel || !starboardChannel.isText()) return;
