@@ -19,13 +19,13 @@ To run the bot, install the dependencies, compile the TypeScript to JavaScript w
 git clone https://www.github.com/corvance/phobosbot
 cd phobosbot
 
-npm i --save-dev typescript dotenv discord.js
+npm i --save-dev typescript dotenv discord.js sqlite3 @types/sqlite3
 
 export PHOBOSBOT_TOKEN=1234567890_abcdefghijklmnopqrstuvwxyz.ABCDEFGHIJKLMNOPQRSTUVWXYZ_12345
 npm run compile && npm run start
 ```
 
-You can run a testing instance of the bot using a Discord application bot with a username ending in '-Testing', changing the prefix from s/ to st/.
+You can run a testing instance of the bot using a Discord application bot with a username ending in '-Testing', changing the prefix from p/ to pt/.
 Before using, you MUST create a database file `db.sqlite3` in the top level directory (adjacent to the `dist` directory). For it to work in your server,
 you must add it to the `guilds` table.
 
